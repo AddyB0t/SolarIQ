@@ -6,6 +6,7 @@ import { useFonts, Sora_300Light, Sora_400Regular, Sora_500Medium, Sora_600SemiB
 import { JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_600SemiBold } from '@expo-google-fonts/jetbrains-mono';
 import { colors } from '../lib/theme';
 import { startSimulator, stopSimulator } from '../lib/simulator';
+import { seedHistoricalData } from '../lib/seedData';
 import { AuroraBackground } from '../components/ui/AuroraBackground';
 
 export default function RootLayout() {
@@ -15,7 +16,7 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    startSimulator();
+    seedHistoricalData().then(() => startSimulator());
     return () => stopSimulator();
   }, []);
 
