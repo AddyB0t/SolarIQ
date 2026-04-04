@@ -1,5 +1,5 @@
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Sun } from 'lucide-react-native';
 import { colors, fonts, spacing } from '../../lib/theme';
 import { useSensorData } from '../../hooks/useSensorData';
@@ -58,9 +58,11 @@ export default function HomeScreen() {
     forceSources(current);
   };
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <View style={styles.safe}>
+      <ScrollView style={styles.scroll} contentContainerStyle={[styles.content, { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <GradientText style={styles.title}>SolarIQ</GradientText>
           <Text style={styles.subtitle}>Dashboard</Text>
@@ -170,9 +172,8 @@ export default function HomeScreen() {
           </GlassCard>
         )}
 
-        <View style={{ height: 32 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

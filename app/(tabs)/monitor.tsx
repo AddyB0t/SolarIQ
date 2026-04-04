@@ -1,5 +1,5 @@
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TrendingUp, Thermometer, Sun, Leaf, Trees } from 'lucide-react-native';
 import { colors, fonts, spacing } from '../../lib/theme';
 import { useSensorData } from '../../hooks/useSensorData';
@@ -37,9 +37,11 @@ export default function MonitorScreen() {
 
   const efficiencyScore = latest ? Math.round(latest.efficiency * 10) / 10 : 0;
 
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.safe}>
-      <ScrollView style={styles.scroll} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <View style={styles.safe}>
+      <ScrollView style={styles.scroll} contentContainerStyle={[styles.content, { paddingTop: insets.top + spacing.lg, paddingBottom: insets.bottom + 32 }]} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <GradientText style={styles.title}>Monitor</GradientText>
           <Text style={styles.subtitle}>Live Data & AI Insights</Text>
@@ -116,9 +118,8 @@ export default function MonitorScreen() {
           </View>
         </GlassCard>
 
-        <View style={{ height: 32 }} />
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
