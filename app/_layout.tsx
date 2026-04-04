@@ -6,6 +6,7 @@ import { useFonts, Sora_300Light, Sora_400Regular, Sora_500Medium, Sora_600SemiB
 import { JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_600SemiBold } from '@expo-google-fonts/jetbrains-mono';
 import { colors } from '../lib/theme';
 import { startSimulator, stopSimulator } from '../lib/simulator';
+import { AuroraBackground } from '../components/ui/AuroraBackground';
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -29,10 +30,13 @@ export default function RootLayout() {
   return (
     <>
       <StatusBar style="light" />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
+      <View style={{ flex: 1, backgroundColor: colors.background }}>
+        <AuroraBackground />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: 'transparent' } }}>
+          <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </View>
     </>
   );
 }
