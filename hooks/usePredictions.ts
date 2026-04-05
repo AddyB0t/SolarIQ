@@ -22,8 +22,9 @@ export function usePredictions() {
   useEffect(() => {
     fetchPredictions();
 
+    const channelName = `predictions_${Date.now()}`;
     const channel = supabase
-      .channel('predictions_realtime')
+      .channel(channelName)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'predictions' },

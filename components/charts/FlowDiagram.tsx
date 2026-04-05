@@ -70,13 +70,13 @@ export function FlowDiagram({ activeSources, solarPower, batteryLevel, homeLoad,
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <FlowNode icon={<Sun size={24} color={colors.primary} />} label="Solar" value={`${(solarPower / 1000).toFixed(2)} kW`} color={colors.primary} active={hasSolar} />
+        <FlowNode icon={<Sun size={20} color={colors.primary} />} label="Solar" value={`${(solarPower / 1000).toFixed(1)} kW`} color={colors.primary} active={hasSolar} />
         <FlowArrow active={hasSolar && hasBattery} />
-        <FlowNode icon={<Battery size={24} color={colors.success} />} label="Battery" value={`${batteryLevel}%`} color={colors.success} active={hasBattery} />
+        <FlowNode icon={<Battery size={20} color={colors.success} />} label="Battery" value={`${batteryLevel}%`} color={colors.success} active={hasBattery} />
         <FlowArrow active={true} />
-        <FlowNode icon={<Home size={24} color={colors.warning} />} label="Home" value={`${(homeLoad / 1000).toFixed(2)} kW`} color={colors.warning} active={true} />
+        <FlowNode icon={<Home size={20} color={colors.warning} />} label="Home" value={`${(homeLoad / 1000).toFixed(1)} kW`} color={colors.warning} active={true} />
         <FlowArrow active={hasGrid} />
-        <FlowNode icon={<Zap size={24} color={colors.danger} />} label="Grid" value={`${(gridPower / 1000).toFixed(2)} kW`} color={colors.danger} active={hasGrid} />
+        <FlowNode icon={<Zap size={20} color={colors.danger} />} label="Grid" value={`${(gridPower / 1000).toFixed(1)} kW`} color={colors.danger} active={hasGrid} />
       </View>
     </View>
   );
@@ -84,11 +84,11 @@ export function FlowDiagram({ activeSources, solarPower, batteryLevel, homeLoad,
 
 const styles = StyleSheet.create({
   container: { paddingVertical: 12 },
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 2 },
-  node: { alignItems: 'center', gap: 6, width: 68 },
-  nodeIcon: { width: 52, height: 52, borderRadius: 16, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
-  nodeLabel: { fontFamily: fonts.sora.medium, fontSize: 9, color: colors.textSecondary, letterSpacing: 2, textTransform: 'uppercase' },
-  nodeValue: { fontFamily: fonts.sora.bold, fontSize: 12 },
-  arrow: { marginBottom: 36 },
-  arrowText: { fontSize: 18, color: colors.primary },
+  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
+  node: { alignItems: 'center', gap: 4, flex: 1 },
+  nodeIcon: { width: 46, height: 46, borderRadius: 14, borderWidth: 1, alignItems: 'center', justifyContent: 'center' },
+  nodeLabel: { fontFamily: fonts.sora.medium, fontSize: 8, color: colors.textSecondary, letterSpacing: 1.5, textTransform: 'uppercase' },
+  nodeValue: { fontFamily: fonts.sora.bold, fontSize: 11 },
+  arrow: { marginBottom: 30, paddingHorizontal: 2 },
+  arrowText: { fontSize: 14, color: colors.primary },
 });

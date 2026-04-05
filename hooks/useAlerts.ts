@@ -6,23 +6,24 @@ export function useAlerts() {
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchAlerts = useCallback(async () => {
-    const { data } = await supabase
-      .from('alerts')
-      .select('*')
-      .eq('acknowledged', false)
-      .order('created_at', { ascending: false })
-      .limit(20);
-
-    if (data) setAlerts(data);
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
+    const fetchAlerts = async () => {
+      const { data } = await supabase
+        .from('alerts')
+        .select('*')
+        .eq('acknowledged', false)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (data) setAlerts(data);
+      setLoading(false);
+    };
+
     fetchAlerts();
 
+    const channelName = `alerts_${Date.now()}`;
     const channel = supabase
-      .channel('alerts_realtime')
+      .channel(channelName)
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'alerts' },
@@ -35,7 +36,7 @@ export function useAlerts() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [fetchAlerts]);
+  }, []);
 
   const acknowledgeAlert = useCallback(async (id: string) => {
     await supabase.from('alerts').update({ acknowledged: true }).eq('id', id);

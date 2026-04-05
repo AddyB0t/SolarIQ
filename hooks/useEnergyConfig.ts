@@ -6,23 +6,24 @@ export function useEnergyConfig() {
   const [config, setConfig] = useState<EnergyConfig | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchConfig = useCallback(async () => {
-    const { data } = await supabase
-      .from('energy_config')
-      .select('*')
-      .order('updated_at', { ascending: false })
-      .limit(1)
-      .single();
-
-    if (data) setConfig(data);
-    setLoading(false);
-  }, []);
-
   useEffect(() => {
+    const fetchConfig = async () => {
+      const { data } = await supabase
+        .from('energy_config')
+        .select('*')
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (data) setConfig(data);
+      setLoading(false);
+    };
+
     fetchConfig();
 
+    const channelName = `energy_config_${Date.now()}`;
     const channel = supabase
-      .channel('energy_config_realtime')
+      .channel(channelName)
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'energy_config' },
@@ -35,7 +36,7 @@ export function useEnergyConfig() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [fetchConfig]);
+  }, []);
 
   const updateConfig = useCallback(
     async (updates: Partial<Omit<EnergyConfig, 'id' | 'updated_at'>>) => {

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, useWindowDimensions } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { colors, fonts, borderRadius } from '../../lib/theme';
 
@@ -8,15 +8,20 @@ interface ModeToggleProps {
 }
 
 export function ModeToggle({ mode, onToggle }: ModeToggleProps) {
-  const translateX = useSharedValue(mode === 'auto' ? 0 : 1);
+  const { width: screenWidth } = useWindowDimensions();
+  const trackWidth = screenWidth - 88; // account for card padding + screen padding
+  const halfWidth = trackWidth / 2;
+
+  const translateX = useSharedValue(mode === 'auto' ? 0 : halfWidth);
 
   const handlePress = (newMode: 'auto' | 'manual') => {
-    translateX.value = withTiming(newMode === 'auto' ? 0 : 1, { duration: 250 });
+    translateX.value = withTiming(newMode === 'auto' ? 0 : halfWidth, { duration: 250 });
     onToggle(newMode);
   };
 
   const indicatorStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: translateX.value * 140 }],
+    transform: [{ translateX: translateX.value }],
+    width: halfWidth,
   }));
 
   return (
@@ -49,14 +54,13 @@ const styles = StyleSheet.create({
   },
   indicator: {
     position: 'absolute',
-    width: 140,
     height: '100%',
     backgroundColor: 'rgba(79,140,255,0.12)',
     borderRadius: borderRadius.md - 1,
     borderWidth: 1,
     borderColor: 'rgba(79,140,255,0.2)',
   },
-  option: { flex: 1, width: 140, paddingVertical: 12, alignItems: 'center', zIndex: 1 },
+  option: { flex: 1, paddingVertical: 12, alignItems: 'center', zIndex: 1 },
   optionText: { fontFamily: fonts.sora.medium, fontSize: 14, color: colors.textSecondary },
   activeText: { color: colors.primary },
 });

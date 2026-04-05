@@ -1,3 +1,19 @@
+-- ============================================
+-- DROP OLD TABLES (from existing Hackathon DB)
+-- ============================================
+drop table if exists chat_messages cascade;
+drop table if exists conversations cascade;
+drop table if exists profiles cascade;
+drop table if exists shortlisted_universities cascade;
+drop table if exists sop_documents cascade;
+drop table if exists tasks cascade;
+drop table if exists universities cascade;
+drop table if exists user_profiles cascade;
+
+-- ============================================
+-- CREATE SOLARIQ TABLES
+-- ============================================
+
 -- Sensor readings from solar system
 create table sensor_data (
   id uuid primary key default gen_random_uuid(),
@@ -40,14 +56,31 @@ create table alerts (
   created_at timestamptz not null default now()
 );
 
+-- ============================================
+-- DISABLE RLS (allow all access via anon key)
+-- ============================================
+alter table sensor_data disable row level security;
+alter table energy_config disable row level security;
+alter table predictions disable row level security;
+alter table alerts disable row level security;
+
+-- ============================================
+-- ENABLE REALTIME
+-- ============================================
 alter publication supabase_realtime add table sensor_data;
 alter publication supabase_realtime add table energy_config;
 alter publication supabase_realtime add table predictions;
 alter publication supabase_realtime add table alerts;
 
+-- ============================================
+-- SEED DEFAULT CONFIG
+-- ============================================
 insert into energy_config (mode, active_sources, low_threshold, high_threshold)
 values ('auto', '{solar}', 500, 1200);
 
+-- ============================================
+-- INDEXES
+-- ============================================
 create index idx_sensor_data_timestamp on sensor_data (timestamp desc);
 create index idx_predictions_target_hour on predictions (target_hour desc);
 create index idx_alerts_created_at on alerts (created_at desc);
