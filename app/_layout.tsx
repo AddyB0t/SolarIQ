@@ -9,6 +9,7 @@ import { colors } from '../lib/theme';
 import { startSimulator, stopSimulator } from '../lib/simulator';
 import { seedHistoricalData } from '../lib/seedData';
 import { AuroraBackground } from '../components/ui/AuroraBackground';
+import { useAutoRouting } from '../hooks/useAutoRouting';
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -20,6 +21,9 @@ export default function RootLayout() {
     // ESP32 is the data source; in-app simulator disabled to avoid double writes.
     seedHistoricalData();
   }, []);
+
+  // App is the brain of Auto-mode routing decisions.
+  useAutoRouting();
 
   if (!fontsLoaded) {
     return (
