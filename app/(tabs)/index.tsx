@@ -47,15 +47,8 @@ export default function HomeScreen() {
   const mode = config?.mode || 'auto';
   const energyMode = getEnergyMode(activeSources as EnergySource[]);
 
-  const handleSourceToggle = (source: EnergySource) => {
-    const current = [...(config?.active_sources || ['solar'])] as EnergySource[];
-    const idx = current.indexOf(source);
-    if (idx >= 0 && current.length > 1) {
-      current.splice(idx, 1);
-    } else if (idx < 0) {
-      current.push(source);
-    }
-    forceSources(current);
+  const handleSourceSelect = (source: EnergySource) => {
+    forceSources([source]);
   };
 
   const insets = useSafeAreaInsets();
@@ -136,12 +129,12 @@ export default function HomeScreen() {
 
           {mode === 'manual' && (
             <View style={styles.sourceRow}>
-              {(['solar', 'battery', 'grid'] as EnergySource[]).map((s) => (
+              {(['solar', 'grid'] as EnergySource[]).map((s) => (
                 <SourceButton
                   key={s}
                   source={s}
-                  active={activeSources.includes(s)}
-                  onPress={() => handleSourceToggle(s)}
+                  active={activeSources[0] === s && activeSources.length === 1}
+                  onPress={() => handleSourceSelect(s)}
                 />
               ))}
             </View>
