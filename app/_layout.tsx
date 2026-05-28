@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
@@ -6,8 +5,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts, Sora_300Light, Sora_400Regular, Sora_500Medium, Sora_600SemiBold, Sora_700Bold, Sora_800ExtraBold } from '@expo-google-fonts/sora';
 import { JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_600SemiBold } from '@expo-google-fonts/jetbrains-mono';
 import { colors } from '../lib/theme';
-import { startSimulator, stopSimulator } from '../lib/simulator';
-import { seedHistoricalData } from '../lib/seedData';
 import { AuroraBackground } from '../components/ui/AuroraBackground';
 import { useAutoRouting } from '../hooks/useAutoRouting';
 
@@ -17,10 +14,8 @@ export default function RootLayout() {
     JetBrainsMono_400Regular, JetBrainsMono_500Medium, JetBrainsMono_600SemiBold,
   });
 
-  useEffect(() => {
-    // ESP32 is the data source; in-app simulator disabled to avoid double writes.
-    seedHistoricalData();
-  }, []);
+  // ESP32 is the data source; both the simulator and the historical-data
+  // seeder are off so nothing but real ESP32 readings land in sensor_data.
 
   // App is the brain of Auto-mode routing decisions.
   useAutoRouting();
