@@ -1,18 +1,20 @@
 import MaskedView from '@react-native-masked-view/masked-view';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Text, TextStyle } from 'react-native';
-import { colors } from '../../lib/theme';
+import { Text, TextStyle, type ColorValue } from 'react-native';
+import { colors as themeColors } from '../../lib/theme';
+
+type GradientColors = readonly [ColorValue, ColorValue, ...ColorValue[]];
 
 interface GradientTextProps {
   children: string;
   style?: TextStyle;
-  colors?: string[];
+  colors?: GradientColors;
 }
 
 export function GradientText({
   children,
   style,
-  colors: gradColors = [colors.gradientStart, colors.gradientEnd],
+  colors: gradColors = [themeColors.gradientStart, themeColors.gradientEnd],
 }: GradientTextProps) {
   return (
     <MaskedView maskElement={<Text style={[style, { backgroundColor: 'transparent' }]}>{children}</Text>}>
