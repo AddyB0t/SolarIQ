@@ -17,8 +17,8 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    seedHistoricalData().then(() => startSimulator());
-    return () => stopSimulator();
+    // ESP32 is the data source; in-app simulator disabled to avoid double writes.
+    seedHistoricalData();
   }, []);
 
   if (!fontsLoaded) {
